@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, send_file,jsonify
 import qrcode
 from PIL import Image
 from werkzeug.utils import secure_filename
-from waitress import serve
 from flask_cors  import CORS
 import os
 import cv2
@@ -718,5 +717,4 @@ def upload():
 
 
 if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=4080)
     app.run(debug=True)
