@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
+</head>
+
+<body>
+    <nav>
+        <div class="navbar">
+            <i class='bx bx-menu'></i>
+            <div class="logo"> <img class="logo" src="static/img/logoqrcodemaster.png" alt=""></div>
+            <div class="nav-links">
+                <div class="sidebar-logo">
+                    <span class="logo-name"></span>
+                    <i class='bx bx-x'></i>
+                </div>
+                <ul class="links">
+                    <li><a href="#" data-translate="HOME">HOME</a></li>
+                    <li><a href="#">SOBRE NOS</a></li>
+                    <li><a href="">CONTATO</a></li>
+                    <li><a href="">POLITICA PRIVACIDADE</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="card">
+        <div class="row">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/'" src="/static/img/link.png" alt="Imagem 1">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/whatsapp'" src="/static/img/whatsapp.png" alt="Imagem 2">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/sms'" src="/static/img/chat-bubbles-with-ellipsis.png" alt="Imagem 3">
+            </div>
+            <div class="column">
+                <img class="toolbar"  onclick="window.location.href='/localizacao'" src="/static/img/location.png" alt="Imagem 4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/email'"  src="/static/img/mail.png" alt="Imagem 5">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/telefone'" src="/static/img/telephone-call.png" alt="Imagem 6">
+            </div>
+            <div class="column">
+                <img class="toolbar"  onclick="window.location.href='/cartVi'"  src="/static/img/business-cards.png" alt="Imagem 7">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/wifi'" src="/static/img/wifi.png" alt="Imagem 8">
+            </div>
+        </div>
+        <div class="row2">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/leitor'"  src="static/img/scan.png" alt="Imagem 4">
+            </div>
+        </div>
+    </div>
+    <form class="Qrcode" id="qrcodeForm" enctype="multipart/form-data">
+        <label for="codigoPais">Código do País</label><br>
+        <input class="input" type="number" id="codigoPais" name="codigoPais"><br><br>
+        <label for="numeroTelefone">Número de Telefone</label><br>
+        <input class="input" type="number" id="numeroTelefone" name="numeroTelefone"><br><br>
+        <label for="corQR">Cor do QR Code</label><br>
+        <input class="input" type="color" id="corQR" name="corQR" value="#000000"><br><br>
+        <label for="backQR">Cor de Fundo QR Code</label><br>
+        <input class="input" type="color" id="backQR" name="backQR" value="#ffffff"><br><br>
+        <label for="file">Carregar Logotipo:</label>
+        <input type="file" id="file" name="file" required><br><br>
+        <button type="button"  id="gerarQR">Gerar QR Code</button>
+    </form>
+    <div id="qrcode"></div>
+    <div class="btQr">
+        <a id="downloadLink" style="display: none;" download="qrcode.png"><button id="downloadButton">Baixar QR
+            Code</button></a>
+    </div>
+    <script>
+        document.getElementById('gerarQR').addEventListener('click', function () {
+            var form = document.getElementById('qrcodeForm');
+            var formData = new FormData(form);
+
+            fetch('/gerar_qrcode_telefone', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    var url = URL.createObjectURL(blob);
+                    var img = document.createElement('img');
+                    img.src = url;
+                    document.getElementById('qrcode').innerHTML = '';
+                    document.getElementById('qrcode').appendChild(img);
+
+                    document.getElementById('downloadLink').setAttribute('href', url);
+                    document.getElementById('downloadLink').style.display = 'block';
+                })
+                .catch(error => console.error('Erro:', error));
+        });
+    </script>
+    <script src="static/menu.js"></script>
+</body>
+
+</html>

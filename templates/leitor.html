@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor QrCode</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="navbar">
+            <i class='bx bx-menu'></i>
+            <div class="logo"> <img class="logo" src="static/img/logoqrcodemaster.png" alt=""></div>
+            <div class="nav-links">
+                <div class="sidebar-logo">
+                    <span class="logo-name"></span>
+                    <i class='bx bx-x'></i>
+                </div>
+                <ul class="links">
+                    <li><a href="#" data-translate="HOME">HOME</a></li>
+                    <li><a href="#">SOBRE NOS</a></li>
+                    <li><a href="">CONTATO</a></li>
+                    <li><a href="">POLITICA PRIVACIDADE</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="card">
+        <div class="row">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/'" src="/static/img/link.png" alt="Imagem 1">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/whatsapp'" src="/static/img/whatsapp.png" alt="Imagem 2">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/sms'" src="/static/img/chat-bubbles-with-ellipsis.png" alt="Imagem 3">
+            </div>
+            <div class="column">
+                <img class="toolbar"  onclick="window.location.href='/localizacao'" src="/static/img/location.png" alt="Imagem 4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/email'"  src="/static/img/mail.png" alt="Imagem 5">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/telefone'" src="/static/img/telephone-call.png" alt="Imagem 6">
+            </div>
+            <div class="column">
+                <img class="toolbar"  onclick="window.location.href='/cartVi'"  src="/static/img/business-cards.png" alt="Imagem 7">
+            </div>
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/wifi'" src="/static/img/wifi.png" alt="Imagem 8">
+            </div>
+        </div>
+        <div class="row2">
+            <div class="column">
+                <img class="toolbar" onclick="window.location.href='/leitor'"  src="static/img/scan.png" alt="Imagem 4">
+            </div>
+        </div>
+    </div>
+    <div class="qr">
+        <input type="file" id="fileInput" accept="image/*">
+    </div>
+    <div class="code">
+        <a id="qrCodeData"></a>
+    </div>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function() {
+            var file = this.files[0];
+            if (file) {
+                var formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.qr_code_data) {
+                        document.getElementById('qrCodeData').textContent = data.qr_code_data;
+                    } else {
+                        document.getElementById('qrCodeData').textContent = 'No QR code found';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('qrCodeData').textContent = 'Error reading QR code';
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
