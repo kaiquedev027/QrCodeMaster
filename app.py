@@ -5,7 +5,6 @@ from werkzeug.utils import secure_filename
 from flask_cors  import CORS
 import os
 import cv2
-from pyzbar.pyzbar import decode
 import random
 import string
 from io import BytesIO
@@ -13,11 +12,6 @@ from io import BytesIO
 
 app = Flask(__name__)
 CORS(app)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -56,10 +50,6 @@ def generate_random_subdomain(length=6):
 @app.route('/cardapio')
 def cardapio():
     return render_template('cardapio.html')
-
-@app.route('/leitor')
-def leitor():
-    return render_template('leitor.html')
 
 @app.route('/gerar_qrcode', methods=['POST'])
 def gerar_qrcode():
@@ -685,36 +675,5 @@ def show_page(subdomain):
     except:
         return "Page not found", 404
     
-
-def decode_qr_code(image_path):
-    image = cv2.imread(image_path)
-    decoded_objects = decode(image)
-    qr_data = None
-    for obj in decoded_objects:
-        qr_data = obj.data.decode('utf-8')
-    return qr_data
-
-
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    if file:
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(file_path)
-        qr_code_data = decode_qr_code(file_path)
-        os.remove(file_path)
-        if qr_code_data:
-            return jsonify({'qr_code_data': qr_code_data}), 200
-        else:
-            return jsonify({'error': 'No QR code found'}), 400
-
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
