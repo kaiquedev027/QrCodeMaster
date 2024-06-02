@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'>
+</head>
+
+<body>
+    <nav>
+        <div class="navbar">
+            <i class='bx bx-menu'></i>
+            <div class="logo"> <img class="logo" src="static/img/logoqrcodemaster.png" alt=""></div>
+            <div class="nav-links">
+                <div class="sidebar-logo">
+                    <span class="logo-name"></span>
+                    <i class='bx bx-x'></i>
+                </div>
+                <ul class="links">
+                    <li><a href="#" data-translate="HOME">HOME</a></li>
+                    <li><a href="#">SOBRE NOS</a></li>
+                    <li><a href="">CONTATO</a></li>
+                    <li><a href="">POLITICA PRIVACIDADE</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>Contate-Nos</h2>
+        <form action="/submit_form" method="post">
+            <label for="name">Nome:</label>
+            <input class="input" type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input class="input" type="email" id="email" name="email" required>
+
+            <label  for="subject">Assunto:</label>
+            <input class="input" type="text" id="subject" name="subject" required>
+
+            <label for="message">Mensagem:</label>
+            <textarea class="input" id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <script src="static/menu.js"></script>
+</body>
+
+</html>
