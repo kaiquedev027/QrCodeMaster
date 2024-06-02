@@ -7,6 +7,9 @@ import os
 import cv2
 import random
 import string
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from io import BytesIO
 
 
@@ -43,6 +46,10 @@ def whatsapp():
 @app.route('/localizacao')
 def localizacao():
     return render_template('localizacao.html')
+
+@app.route('/contato')
+def contato():
+    return render_template('contato.html')
 
 def generate_random_subdomain(length=6):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
@@ -674,6 +681,43 @@ def show_page(subdomain):
         return render_template(f"generated/{subdomain}.html")
     except:
         return "Page not found", 404
+
+@app.route('/submit_form', methods=['POST'])
+def submit_form():
+    name = request.form['name']
+    email = request.form['email']
+    subject = request.form['subject']
+    message = request.form['message']
+    
+    # Configurações do email
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_user = 'qrcodemastercombr@gmail.com'
+    smtp_password = 'xxlh iwcq pxez bwvn'
+
+    # Configurar o email
+    msg = MIMEMultipart()
+    msg['From'] = smtp_user
+    msg['To'] = 'qrcodemastercombr@gmail.com'
+    msg['Subject'] = subject
+
+    body = f'Nome: {name}\nEmail: {email}\n\n{message}'
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        # Enviar o email
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        text = msg.as_string()
+        server.sendmail(smtp_user, 'qrcodemastercombr@gmail.com', text)
+        server.quit()
+
+        return render_template('success.html')
+    except Exception as e:
+        print(f'Erro ao enviar email: {e}')
+        return 'Erro ao enviar o formulário.'
+
     
 if __name__ == '__main__':
     app.run(debug=True)
