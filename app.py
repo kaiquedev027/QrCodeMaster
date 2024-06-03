@@ -51,6 +51,10 @@ def localizacao():
 def contato():
     return render_template('contato.html')
 
+@app.route('/politica')
+def politica():
+    return render_template('politica.html')
+
 def generate_random_subdomain(length=6):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
